@@ -6,35 +6,35 @@ import { useRouter } from 'next/navigation'
 
 const CATEGORIES = {
   'Essential Home Repairs': [
-    'Electrician',
-    'Plumber',
-    'Carpenter (Ashari)',
-    'Mason (Mestri)',
-    'Painter',
+    { skill: 'Electrician', desc: 'Fixing lights, fans, faulty switches, or motor/pump issues.' },
+    { skill: 'Plumber', desc: 'Fixing leaking taps, blocked pipes, tank cleaning, and bathroom fittings.' },
+    { skill: 'Carpenter (Ashari)', desc: 'Repairing wooden doors, windows, locks, and furniture.' },
+    { skill: 'Mason (Mestri)', desc: 'Tiling, granite work, wall plastering, and minor cement repairs.' },
+    { skill: 'Painter', desc: 'Interior/exterior wall painting, metal polishing, and waterproofing.' },
   ],
   'Heavy Work & Labour': [
-    'Material Shifting',
-    'Earthwork / Digging',
-    'Land Clearing',
-    'Construction Debris Removal',
+    { skill: 'Material Shifting', desc: 'Moving sand, bricks, laterite stones (Vettu Kallu), or cement to the work site.' },
+    { skill: 'Earthwork / Digging', desc: 'Digging for foundations, septic tanks, or water pipe trenches.' },
+    { skill: 'Land Clearing', desc: 'Leveling uneven ground or removing soil and rocks from the yard.' },
+    { skill: 'Construction Debris Removal', desc: 'Clearing away waste materials after a renovation.' },
   ],
   'Kerala Specialty Services': [
-    'Coconut Climber (Thenga Kayattam)',
-    'Grass / Bush Cutting',
-    'Well Maintenance',
-    'Event Helper / Cook',
+    { skill: 'Coconut Climber (Thenga Kayattam)', desc: 'Climbing and cleaning coconut trees or harvesting.' },
+    { skill: 'Grass / Bush Cutting', desc: 'Clearing overgrown grass and weeds using a brush cutter.' },
+    { skill: 'Well Maintenance', desc: 'Deep cleaning the house well and fixing motor issues.' },
+    { skill: 'Event Helper / Cook', desc: 'Assisting with food prep (Sadhya/Biryani) or cleaning for home functions.' },
   ],
   'Machine & Tech Support': [
-    'AC & Fridge Technician',
-    'Inverter / Solar Fixer',
-    'CCTV & Wi-Fi Setup',
-    'Washing Machine / Oven Repair',
+    { skill: 'AC & Fridge Technician', desc: 'Servicing, gas filling, and cooling repairs.' },
+    { skill: 'Inverter / Solar Fixer', desc: 'Maintaining power backups and solar water heaters.' },
+    { skill: 'CCTV & Wi-Fi Setup', desc: 'Installing security cameras or fixing internet range issues.' },
+    { skill: 'Washing Machine / Oven Repair', desc: 'Fixing common household appliances.' },
   ],
   'Outdoor & Transportation': [
-    'Welder',
-    'Gardener',
-    'Two-Wheeler / Car Mechanic',
-    'Small Load Pickup (Tempo)',
+    { skill: 'Welder', desc: 'Fixing iron gates, grills, or any metal fabrication.' },
+    { skill: 'Gardener', desc: 'Planting, pruning, and maintaining the garden or lawn.' },
+    { skill: 'Two-Wheeler / Car Mechanic', desc: 'Basic doorstep service like oil changes or puncture repair.' },
+    { skill: 'Small Load Pickup (Tempo)', desc: 'Transporting heavy items like a fridge, cupboard, or a few bags of cement.' },
   ],
 }
 
@@ -58,7 +58,7 @@ export default function WorkerProfileSetup() {
   const router = useRouter()
   const supabase = createClient()
 
-  const toggleSkill = (category, skill) => {
+const toggleSkill = (category, skill) => {
     const exists = selectedSkills.find(s => s.skill === skill && s.category === category)
     if (exists) {
       setSelectedSkills(selectedSkills.filter(s => !(s.skill === skill && s.category === category)))
@@ -69,6 +69,9 @@ export default function WorkerProfileSetup() {
 
   const isSelected = (category, skill) =>
     !!selectedSkills.find(s => s.skill === skill && s.category === category)
+
+  const [hoveredSkill, setHoveredSkill] = useState(null)
+
 
   const handlePhotoChange = (e) => {
     const file = e.target.files[0]
@@ -223,22 +226,30 @@ export default function WorkerProfileSetup() {
             </div>
 
             {/* Skills Grid */}
-            <div className="grid grid-cols-2 gap-2">
-              {CATEGORIES[activeCategory].map((skill) => (
-                <button
-                  key={skill}
-                  type="button"
-                  onClick={() => toggleSkill(activeCategory, skill)}
-                  className={`px-3 py-2 rounded-xl text-sm font-medium transition text-left ${
-                    isSelected(activeCategory, skill)
-                      ? 'bg-orange-500 text-white'
-                      : 'bg-gray-800 text-gray-400 hover:bg-gray-700'
-                  }`}
-                >
-                  {skill}
-                </button>
-              ))}
-            </div>
+<div className="grid grid-cols-2 gap-2">
+  {CATEGORIES[activeCategory].map(({ skill, desc }) => (
+    <div key={skill} className="relative">
+      <button
+        type="button"
+        onClick={() => toggleSkill(activeCategory, skill)}
+        onMouseEnter={() => setHoveredSkill(skill)}
+        onMouseLeave={() => setHoveredSkill(null)}
+        className={`w-full px-3 py-2 rounded-xl text-sm font-medium transition text-left ${
+          isSelected(activeCategory, skill)
+            ? 'bg-orange-500 text-white'
+            : 'bg-gray-800 text-gray-400 hover:bg-gray-700'
+        }`}
+      >
+        {skill}
+      </button>
+      {hoveredSkill === skill && (
+        <div className="absolute z-10 bottom-full mb-2 left-0 w-56 bg-gray-700 text-gray-200 text-xs rounded-xl p-3 shadow-lg">
+          {desc}
+        </div>
+      )}
+    </div>
+  ))}
+</div>
 
             {/* Selected Skills Summary */}
             {selectedSkills.length > 0 && (
