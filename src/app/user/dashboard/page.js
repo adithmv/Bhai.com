@@ -28,7 +28,6 @@ export default function UserDashboard() {
 
   return (
     <div className="min-h-screen bg-gray-950 text-white">
-      {/* Navbar */}
       <div className="bg-gray-900 px-6 py-4 flex items-center justify-between">
         <h1 className="text-2xl font-bold text-orange-500">bhai.com</h1>
         <div className="flex items-center gap-4">
@@ -37,16 +36,12 @@ export default function UserDashboard() {
         </div>
       </div>
 
-      {/* Hero */}
       <div className="flex flex-col items-center justify-center py-20 px-4 text-center">
         <h2 className="text-4xl font-bold text-white mb-3">
           Welcome back, {profile?.full_name?.split(' ')[0]} 👋
         </h2>
         <p className="text-gray-400 text-lg mb-8">Find the right Bhai for any job around your home</p>
-        
-          href="/user/browse"
-          className="bg-orange-500 hover:bg-orange-600 text-white font-semibold px-8 py-4 rounded-2xl text-lg transition"
-        >
+        <a href="/user/browse" className="bg-orange-500 hover:bg-orange-600 text-white font-semibold px-8 py-4 rounded-2xl text-lg transition">
           Find a Bhai Now
         </a>
       </div>
