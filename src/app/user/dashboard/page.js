@@ -3,6 +3,7 @@
 import { useEffect, useState } from 'react'
 import { createClient } from '@/lib/supabase'
 import { useRouter } from 'next/navigation'
+import LogoutButton from '@/components/shared/LogoutButton'
 
 export default function UserDashboard() {
   const [profile, setProfile] = useState(null)
@@ -33,6 +34,7 @@ export default function UserDashboard() {
         <div className="flex items-center gap-4">
           <a href="/user/bookings" className="text-gray-300 hover:text-orange-400 transition text-sm">My Bookings</a>
           <a href="/user/browse" className="bg-orange-500 hover:bg-orange-600 text-white px-4 py-2 rounded-xl text-sm font-medium transition">Find a Bhai</a>
+<LogoutButton />
         </div>
       </div>
 

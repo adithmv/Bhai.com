@@ -3,6 +3,7 @@
 import { useEffect, useState } from 'react'
 import { createClient } from '@/lib/supabase'
 import { useRouter } from 'next/navigation'
+import LogoutButton from '@/components/shared/LogoutButton'
 
 export default function AdminLayout({ children }) {
   const [loading, setLoading] = useState(true)
@@ -52,7 +53,10 @@ export default function AdminLayout({ children }) {
         <a href="/admin/dashboard" className="text-gray-300 hover:text-orange-400 transition">Dashboard</a>
         <a href="/admin/workers" className="text-gray-300 hover:text-orange-400 transition">Worker Approvals</a>
         <a href="/admin/reports" className="text-gray-300 hover:text-orange-400 transition">Reports</a>
-      </div>
+        </div>
+        <div className="mt-auto">
+            <LogoutButton />
+        </div>
 
       {/* Main Content */}
       <div className="flex-1 p-8">
