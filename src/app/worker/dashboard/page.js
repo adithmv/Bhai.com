@@ -3,6 +3,7 @@
 import { useEffect, useState } from 'react'
 import { createClient } from '@/lib/supabase'
 import { useRouter } from 'next/navigation'
+import LogoutButton from '@/components/shared/LogoutButton'
 
 export default function WorkerDashboard() {
   const [bookings, setBookings] = useState([])
@@ -68,9 +69,12 @@ export default function WorkerDashboard() {
   return (
     <div className="min-h-screen bg-gray-950 text-white">
       <div className="bg-gray-900 px-6 py-4 flex items-center justify-between">
-        <h1 className="text-2xl font-bold text-orange-500">bhai.com</h1>
-        <p className="text-gray-400 text-sm">Welcome, {profile?.full_name?.split(' ')[0]} 👷</p>
-      </div>
+  <h1 className="text-2xl font-bold text-orange-500">bhai.com</h1>
+  <div className="flex items-center gap-4">
+    <p className="text-gray-400 text-sm">Welcome, {profile?.full_name?.split(' ')[0]} 👷</p>
+    <LogoutButton />
+  </div>
+</div>
 
       <div className="max-w-3xl mx-auto px-4 py-10">
 
