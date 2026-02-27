@@ -5,37 +5,36 @@ import { createClient } from '@/lib/supabase'
 import { useRouter } from 'next/navigation'
 
 const CATEGORIES = {
-  'Essential Bhais': [
-    'Electrician (Wireman)',
+  'Essential Home Repairs': [
+    'Electrician',
     'Plumber',
-    'Carpenter',
-    'Mestri (Mason)',
+    'Carpenter (Ashari)',
+    'Mason (Mestri)',
     'Painter',
   ],
-  'Kerala Specials': [
+  'Heavy Work & Labour': [
+    'Material Shifting',
+    'Earthwork / Digging',
+    'Land Clearing',
+    'Construction Debris Removal',
+  ],
+  'Kerala Specialty Services': [
     'Coconut Climber (Thenga Kayattam)',
-    'Well Cleaner (Kinar Panikkaran)',
-    'Brush Cutter / Grass Cutter',
-    'Catering Help / Small Event Cook',
-    'Coconut Husk/Tree Removal',
+    'Grass / Bush Cutting',
+    'Well Maintenance',
+    'Event Helper / Cook',
   ],
-  'Appliance & Electronics': [
-    'AC Mechanic',
-    'Inverter / Solar Tech',
-    'CCTV Technician',
-    'Laptop/Mobile Service',
-    'Fridge/Washing Machine Tech',
+  'Machine & Tech Support': [
+    'AC & Fridge Technician',
+    'Inverter / Solar Fixer',
+    'CCTV & Wi-Fi Setup',
+    'Washing Machine / Oven Repair',
   ],
-  'Outdoor & Heavy Duty': [
+  'Outdoor & Transportation': [
     'Welder',
-    'Automotive (Two-Wheeler/Car)',
-    'Logistics (Tempo/Pickup)',
-    'Septic Tank Cleaning',
-  ],
-  'Cleaning & Home Care': [
-    'Deep Cleaning',
-    'Pest Control',
-    'Gardener/Landscaper',
+    'Gardener',
+    'Two-Wheeler / Car Mechanic',
+    'Small Load Pickup (Tempo)',
   ],
 }
 
@@ -47,17 +46,29 @@ const KERALA_CITIES = [
 
 export default function WorkerProfileSetup() {
   const [form, setForm] = useState({
-    category: '',
-    skill: '',
     city: '',
     bio: '',
   })
+  const [selectedSkills, setSelectedSkills] = useState([])
+  const [activeCategory, setActiveCategory] = useState(Object.keys(CATEGORIES)[0])
   const [photo, setPhoto] = useState(null)
   const [preview, setPreview] = useState(null)
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
   const router = useRouter()
   const supabase = createClient()
+
+  const toggleSkill = (category, skill) => {
+    const exists = selectedSkills.find(s => s.skill === skill && s.category === category)
+    if (exists) {
+      setSelectedSkills(selectedSkills.filter(s => !(s.skill === skill && s.category === category)))
+    } else {
+      setSelectedSkills([...selectedSkills, { category, skill }])
+    }
+  }
+
+  const isSelected = (category, skill) =>
+    !!selectedSkills.find(s => s.skill === skill && s.category === category)
 
   const handlePhotoChange = (e) => {
     const file = e.target.files[0]
@@ -71,6 +82,18 @@ export default function WorkerProfileSetup() {
     e.preventDefault()
     setLoading(true)
     setError('')
+
+    if (selectedSkills.length === 0) {
+      setError('Please select at least one skill.')
+      setLoading(false)
+      return
+    }
+
+    if (!photo) {
+      setError('Please upload a profile photo.')
+      setLoading(false)
+      return
+    }
 
     const { data: { user } } = await supabase.auth.getUser()
 
@@ -102,8 +125,6 @@ export default function WorkerProfileSetup() {
     // insert worker record
     const { error: workerError } = await supabase.from('workers').insert({
       id: user.id,
-      skill: form.skill,
-      category: form.category,
       city: form.city,
       bio: form.bio,
       photo_url,
@@ -115,6 +136,23 @@ export default function WorkerProfileSetup() {
       return
     }
 
+    // insert skills
+    const skillsToInsert = selectedSkills.map(s => ({
+      worker_id: user.id,
+      category: s.category,
+      skill: s.skill,
+    }))
+
+    const { error: skillsError } = await supabase
+      .from('worker_skills')
+      .insert(skillsToInsert)
+
+    if (skillsError) {
+      setError(skillsError.message)
+      setLoading(false)
+      return
+    }
+
     router.push('/worker/dashboard')
   }
 
@@ -122,9 +160,9 @@ export default function WorkerProfileSetup() {
     <div className="min-h-screen bg-gray-950 flex items-center justify-center px-4 py-10">
       <div className="w-full max-w-lg bg-gray-900 rounded-2xl p-8 shadow-xl">
         <h1 className="text-3xl font-bold text-white mb-1">Set Up Your Profile</h1>
-        <p className="text-gray-400 mb-8">Fill in your details to get started on bhai.com</p>
+        <p className="text-gray-400 mb-8">Tell us about yourself to get approved on bhai.com</p>
 
-        <form onSubmit={handleSubmit} className="space-y-5">
+        <form onSubmit={handleSubmit} className="space-y-6">
 
           {/* Photo Upload */}
           <div className="flex flex-col items-center gap-3">
@@ -144,38 +182,9 @@ export default function WorkerProfileSetup() {
                 accept="image/*"
                 onChange={handlePhotoChange}
                 className="hidden"
-                required
               />
             </label>
           </div>
-
-          {/* Category */}
-          <select
-            value={form.category}
-            onChange={(e) => setForm({ ...form, category: e.target.value, skill: '' })}
-            required
-            className="w-full bg-gray-800 text-white rounded-xl px-4 py-3 outline-none"
-          >
-            <option value="">Select Category</option>
-            {Object.keys(CATEGORIES).map((cat) => (
-              <option key={cat} value={cat}>{cat}</option>
-            ))}
-          </select>
-
-          {/* Skill */}
-          {form.category && (
-            <select
-              value={form.skill}
-              onChange={(e) => setForm({ ...form, skill: e.target.value })}
-              required
-              className="w-full bg-gray-800 text-white rounded-xl px-4 py-3 outline-none"
-            >
-              <option value="">Select Skill</option>
-              {CATEGORIES[form.category].map((skill) => (
-                <option key={skill} value={skill}>{skill}</option>
-              ))}
-            </select>
-          )}
 
           {/* City */}
           <select
@@ -184,32 +193,41 @@ export default function WorkerProfileSetup() {
             required
             className="w-full bg-gray-800 text-white rounded-xl px-4 py-3 outline-none"
           >
-            <option value="">Select City</option>
+            <option value="">Select Your City</option>
             {KERALA_CITIES.map((city) => (
               <option key={city} value={city}>{city}</option>
             ))}
           </select>
 
-          {/* Bio */}
-          <textarea
-            placeholder="Short bio — describe your experience (optional)"
-            value={form.bio}
-            onChange={(e) => setForm({ ...form, bio: e.target.value })}
-            rows={3}
-            className="w-full bg-gray-800 text-white rounded-xl px-4 py-3 outline-none placeholder-gray-500 resize-none"
-          />
+          {/* Skills */}
+          <div>
+            <p className="text-white font-semibold mb-3">Select Your Skills *</p>
 
-          {error && <p className="text-red-400 text-sm">{error}</p>}
+            {/* Category Tabs */}
+            <div className="flex flex-wrap gap-2 mb-4">
+              {Object.keys(CATEGORIES).map((cat) => (
+                <button
+                  key={cat}
+                  type="button"
+                  onClick={() => setActiveCategory(cat)}
+                  className={`px-3 py-1 rounded-full text-xs font-medium transition ${
+                    activeCategory === cat
+                      ? 'bg-orange-500 text-white'
+                      : 'bg-gray-800 text-gray-400'
+                  }`}
+                >
+                  {cat}
+                </button>
+              ))}
+            </div>
 
-          <button
-            type="submit"
-            disabled={loading || !photo}
-            className="w-full bg-orange-500 hover:bg-orange-600 disabled:opacity-50 text-white font-semibold py-3 rounded-xl transition"
-          >
-            {loading ? 'Submitting...' : 'Submit for Approval'}
-          </button>
-        </form>
-      </div>
-    </div>
-  )
-}
+            {/* Skills Grid */}
+            <div className="grid grid-cols-2 gap-2">
+              {CATEGORIES[activeCategory].map((skill) => (
+                <button
+                  key={skill}
+                  type="button"
+                  onClick={() => toggleSkill(activeCategory, skill)}
+                  className={`px-3 py-2 rounded-xl text-sm font-medium transition text-left ${
+                    isSelected(activeCategory, skill)
+                      ? 'bg-orange-500 text-white'
