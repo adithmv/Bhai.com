@@ -136,7 +136,7 @@ const ALL_SKILLS = [
 ]
 
 export default function BrowsePage() {
-  const [district, setDistrict] = useState('')
+  const [district, setDistrict] = useState("")
   const [townSearch, setTownSearch] = useState('')
   const [selectedTowns, setSelectedTowns] = useState([])
   const [skill, setSkill] = useState('')
@@ -312,7 +312,7 @@ export default function BrowsePage() {
                     <p className="text-yellow-400 text-sm">⭐ {worker.average_rating} / 5</p>
                   )}
                   {worker.bio && (
-                    <p className="text-gray-500 text-sm italic mt-1">"{worker.bio}"</p>
+                    <p className="text-gray-500 text-sm italic mt-1">&apos;{worker.bio}&apos;</p>
                   )}
                 </div>
                 <button
