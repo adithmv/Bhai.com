@@ -168,6 +168,7 @@ export default function WorkerProfileSetup() {
           <div className="flex flex-col items-center gap-3">
             <div className="w-24 h-24 rounded-full bg-gray-800 overflow-hidden border-2 border-orange-500">
               {preview ? (
+                // eslint-disable-next-line @next/next/no-img-element
                 <img src={preview} alt="preview" className="w-full h-full object-cover" />
               ) : (
                 <div className="w-full h-full flex items-center justify-center text-gray-500 text-sm">
@@ -231,3 +232,49 @@ export default function WorkerProfileSetup() {
                   className={`px-3 py-2 rounded-xl text-sm font-medium transition text-left ${
                     isSelected(activeCategory, skill)
                       ? 'bg-orange-500 text-white'
+                      : 'bg-gray-800 text-gray-400 hover:bg-gray-700'
+                  }`}
+                >
+                  {skill}
+                </button>
+              ))}
+            </div>
+
+            {/* Selected Skills Summary */}
+            {selectedSkills.length > 0 && (
+              <div className="mt-3 flex flex-wrap gap-2">
+                {selectedSkills.map((s) => (
+                  <span
+                    key={`${s.category}-${s.skill}`}
+                    className="bg-orange-500 bg-opacity-20 text-orange-300 text-xs px-2 py-1 rounded-full"
+                  >
+                    {s.skill}
+                  </span>
+                ))}
+              </div>
+            )}
+          </div>
+
+          {/* Bio */}
+          <textarea
+            placeholder="Short bio — describe your experience (optional)"
+            value={form.bio}
+            onChange={(e) => setForm({ ...form, bio: e.target.value })}
+            rows={3}
+            className="w-full bg-gray-800 text-white rounded-xl px-4 py-3 outline-none placeholder-gray-500 resize-none"
+          />
+
+          {error && <p className="text-red-400 text-sm">{error}</p>}
+
+          <button
+            type="submit"
+            disabled={loading}
+            className="w-full bg-orange-500 hover:bg-orange-600 disabled:opacity-50 text-white font-semibold py-3 rounded-xl transition"
+          >
+            {loading ? 'Submitting...' : 'Submit for Approval'}
+          </button>
+        </form>
+      </div>
+    </div>
+  )
+}
