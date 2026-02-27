@@ -14,11 +14,12 @@ export default function AdminWorkers() {
 
     const { data } = await supabase
       .from('workers')
-      .select(`
+     .select(`
         *,
         profiles (full_name, phone),
-        worker_skills (skill, category)
-      `)
+        worker_skills (skill, category),
+        worker_towns (town)
+    `)
       .eq('status', filter)
       .order('created_at', { ascending: false })
 
@@ -73,7 +74,14 @@ export default function AdminWorkers() {
               <div className="flex-1">
                 <h2 className="text-white text-xl font-bold">{worker.profiles?.full_name}</h2>
                 <p className="text-gray-400 text-sm mb-1">📞 {worker.profiles?.phone}</p>
-                <p className="text-gray-400 text-sm mb-2">📍 {worker.city}</p>
+                <p className="text-gray-400 text-sm mb-1">📍 {worker.district}</p>
+<div className="flex flex-wrap gap-1 mb-2">
+  {worker.worker_towns?.map(t => (
+    <span key={t.town} className="bg-gray-800 text-gray-400 text-xs px-2 py-1 rounded-full">
+      {t.town}
+    </span>
+  ))}
+</div>
 
                 <div className="flex flex-wrap gap-2 mb-3">
                   {worker.worker_skills?.map((s) => (
@@ -84,7 +92,7 @@ export default function AdminWorkers() {
                 </div>
 
                 {worker.bio && (
-                  <p className="text-gray-400 text-sm italic">"{worker.bio}"</p>
+                  <p className="text-gray-400 text-sm italic">&quot;{worker.bio}&quot;</p>
                 )}
               </div>
 
