@@ -1,11 +1,13 @@
 'use client'
 
 import { useEffect, useState } from 'react'
+import Link from 'next/link'
 import { createClient } from '@/lib/supabase'
 import { useRouter } from 'next/navigation'
 import Image from 'next/image'
 import { ChevronLeft, MapPin, Phone, Star, X, Wrench, AlertTriangle, ArrowRight, Calendar } from 'lucide-react'
 import LogoutButton from '@/components/shared/LogoutButton'
+import NotificationBell from '@/components/shared/NotificationBell'
 
 export default function UserBookings() {
   const [bookings, setBookings] = useState([])
@@ -22,6 +24,7 @@ export default function UserBookings() {
   const supabase = createClient()
   const router = useRouter()
 
+  // eslint-disable-next-line react-hooks/immutability
   useEffect(() => { fetchBookings() }, [filter])
 
   const fetchBookings = async () => {
@@ -104,9 +107,10 @@ export default function UserBookings() {
           <Image src="/logo.png" alt="Bhai.com" width={80} height={26} style={{ objectFit: 'contain' }} />
         </div>
         <div style={{ display: 'flex', alignItems: 'center', gap: '1.25rem' }}>
-          <a href="/user/browse" style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', background: '#bf4646', color: 'white', fontSize: '0.78rem', fontWeight: 600, padding: '0.5rem 1rem', borderRadius: '6px', textDecoration: 'none' }}>
-            Find a Bhai <ArrowRight size={13} />
-          </a>
+          <Link href="/user/browse" style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', background: '#bf4646', color: 'white', fontSize: '0.78rem', fontWeight: 600, padding: '0.5rem 1rem', borderRadius: '6px', textDecoration: 'none' }}>
+  Find a Bhai <ArrowRight size={13} />
+          </Link>
+          <NotificationBell />
           <LogoutButton />
         </div>
       </nav>

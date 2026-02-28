@@ -6,6 +6,7 @@ import { useRouter } from 'next/navigation'
 import Image from 'next/image'
 import { ClipboardList, CheckCircle, XCircle, Clock, Phone, Calendar, ChevronRight, Wrench, HardHat, Pencil } from 'lucide-react'
 import LogoutButton from '@/components/shared/LogoutButton'
+import NotificationBell from '@/components/shared/NotificationBell'
 
 export default function WorkerDashboard() {
   const [bookings, setBookings] = useState([])
@@ -30,6 +31,7 @@ export default function WorkerDashboard() {
   }, [])
 
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/immutability
     if (workerStatus === 'approved') fetchBookings()
   }, [filter, workerStatus])
 
@@ -97,7 +99,8 @@ export default function WorkerDashboard() {
     >
       <Pencil size={13} /> Edit Profile
     </button>
-  )}
+          )}
+      <NotificationBell />
   <LogoutButton />
 </div>
       </nav>
