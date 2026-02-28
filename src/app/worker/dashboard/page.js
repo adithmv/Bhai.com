@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react'
 import { createClient } from '@/lib/supabase'
 import { useRouter } from 'next/navigation'
 import Image from 'next/image'
-import { ClipboardList, CheckCircle, XCircle, Clock, Phone, Calendar, ChevronRight, Wrench, HardHat } from 'lucide-react'
+import { ClipboardList, CheckCircle, XCircle, Clock, Phone, Calendar, ChevronRight, Wrench, HardHat, Pencil } from 'lucide-react'
 import LogoutButton from '@/components/shared/LogoutButton'
 
 export default function WorkerDashboard() {
@@ -87,11 +87,19 @@ export default function WorkerDashboard() {
       <nav className="nav">
         <Image src="/logo.png" alt="Bhai.com" width={90} height={28} style={{ objectFit: 'contain' }} />
         <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
-          <p className="sans" style={{ fontSize: '0.82rem', color: '#888' }}>
-            {profile?.full_name?.split(' ')[0]}
-          </p>
-          <LogoutButton />
-        </div>
+  <p className="sans" style={{ fontSize: '0.82rem', color: '#888' }}>
+    {profile?.full_name?.split(' ')[0]}
+  </p>
+  {workerStatus === 'approved' && (
+    <button
+      onClick={() => router.push('/worker/edit')}
+      style={{ display: 'flex', alignItems: 'center', gap: '0.35rem', padding: '0.45rem 0.875rem', background: '#fff4ea', border: '1px solid #eddcc6', borderRadius: '6px', fontFamily: 'DM Sans, sans-serif', fontSize: '0.78rem', fontWeight: 600, color: '#555', cursor: 'pointer' }}
+    >
+      <Pencil size={13} /> Edit Profile
+    </button>
+  )}
+  <LogoutButton />
+</div>
       </nav>
 
       <div style={{ maxWidth: '680px', margin: '0 auto', padding: '2rem 1rem' }}>
