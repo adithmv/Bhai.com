@@ -5,6 +5,7 @@ import { createClient } from '@/lib/supabase'
 import { useRouter } from 'next/navigation'
 import Image from 'next/image'
 import { Mail, Lock, ArrowRight, Eye, EyeOff } from 'lucide-react'
+import Link from 'next/link'
 
 export default function LoginPage() {
   const [email, setEmail] = useState('')
@@ -78,11 +79,14 @@ export default function LoginPage() {
 
       {/* Top bar */}
       <div style={{ background: '#bf4646', padding: '1.25rem 1.5rem', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-        <Image src="/logo.png" alt="Bhai.com" width={100} height={32} style={{ objectFit: 'contain', filter: 'brightness(0) invert(1)' }} />
-        <a href="/auth/register" className="sans" style={{ fontSize: '0.8rem', color: 'rgba(255,255,255,0.8)', textDecoration: 'none', fontWeight: 500 }}>
-          New user? Register
-        </a>
-      </div>
+  <Link href="/" style={{ fontSize: '0.8rem', color: 'rgba(255,255,255,0.8)', textDecoration: 'none', fontWeight: 500, fontFamily: 'DM Sans, sans-serif' }}>
+    ← Home
+  </Link>
+  <Image src="/logo.png" alt="Bhai.com" width={100} height={32} style={{ objectFit: 'contain', filter: 'brightness(0) invert(1)' }} />
+  <Link href="/auth/register" className="sans" style={{ fontSize: '0.8rem', color: 'rgba(255,255,255,0.8)', textDecoration: 'none', fontWeight: 500 }}>
+    New user? Register
+  </Link>
+</div>
 
       {/* Main */}
       <div style={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', padding: '2rem 1rem' }}>
@@ -123,7 +127,7 @@ export default function LoginPage() {
 
           <div style={{ marginTop: '1.5rem', paddingTop: '1.5rem', borderTop: '1px solid #f0e4d6', textAlign: 'center' }}>
             <p className="sans" style={{ fontSize: '0.82rem', color: '#aaa' }}>
-              Don't have an account?{' '}
+              Don&apos;t have an account?{' '}
               <a href="/auth/register" style={{ color: '#bf4646', textDecoration: 'none', fontWeight: 600 }}>Register</a>
             </p>
             <p className="sans" style={{ fontSize: '0.82rem', color: '#aaa', marginTop: '0.5rem' }}>

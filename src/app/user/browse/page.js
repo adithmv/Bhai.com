@@ -198,12 +198,17 @@ export default function BrowsePage() {
                   <div style={{ flex: 1, minWidth: 0 }}>
                     <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', gap: '0.5rem', marginBottom: '0.35rem' }}>
                       <p className="sans" style={{ fontSize: '0.95rem', fontWeight: 700, color: '#2d2d2d' }}>{worker.profiles?.full_name}</p>
-                      {worker.average_rating > 0 && (
-                        <div style={{ display: 'flex', alignItems: 'center', gap: '0.25rem', flexShrink: 0 }}>
-                          <Star size={12} color="#bf4646" fill="#bf4646" />
-                          <span className="sans" style={{ fontSize: '0.78rem', fontWeight: 600, color: '#2d2d2d' }}>{worker.average_rating}</span>
-                        </div>
-                      )}
+                      <div style={{ display: 'flex', alignItems: 'center', gap: '0.25rem', flexShrink: 0 }}>
+  {worker.average_rating > 0 ? (
+    <>
+      <Star size={12} color="#bf4646" fill="#bf4646" />
+      <span className="sans" style={{ fontSize: '0.78rem', fontWeight: 600, color: '#2d2d2d' }}>{worker.average_rating}</span>
+      <span className="sans" style={{ fontSize: '0.72rem', color: '#aaa' }}>({worker.total_reviews})</span>
+    </>
+  ) : (
+    <span className="sans" style={{ fontSize: '0.72rem', color: '#bbb' }}>No reviews</span>
+  )}
+</div>
                     </div>
                     <p className="sans" style={{ fontSize: '0.78rem', color: '#aaa', display: 'flex', alignItems: 'center', gap: '0.25rem', marginBottom: '0.6rem' }}>
                       <MapPin size={11} /> {worker.district}
@@ -215,7 +220,7 @@ export default function BrowsePage() {
                       {worker.worker_towns?.slice(0, 3).map(t => <span key={t.town} className="town-pill">{t.town}</span>)}
                       {worker.worker_towns?.length > 3 && <span className="town-pill">+{worker.worker_towns.length - 3} more</span>}
                     </div>
-                    {worker.bio && <p className="sans" style={{ fontSize: '0.78rem', color: '#bbb', marginTop: '0.5rem', fontStyle: 'italic' }}>"{worker.bio}"</p>}
+                    {worker.bio && <p className="sans" style={{ fontSize: '0.78rem', color: '#bbb', marginTop: '0.5rem', fontStyle: 'italic' }}>&quot;{worker.bio}&quot;</p>}
                   </div>
                 </div>
                 <div style={{ padding: '0.875rem 1.25rem', borderTop: '1px solid #f5ede3', display: 'flex', justifyContent: 'flex-end' }}>

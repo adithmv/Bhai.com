@@ -11,6 +11,7 @@ import {
   ChevronRight, CheckCircle, Users, Clock
 } from 'lucide-react'
 
+
 export default function LandingPage() {
   const supabase = createClient()
   const router = useRouter()

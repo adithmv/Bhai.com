@@ -83,7 +83,7 @@ export default function UserDashboard() {
 
         {/* Quick actions */}
         <div style={{ display: 'flex', gap: '1rem', marginBottom: '2rem' }}>
-          <link href="/user/browse" className="action-btn">
+          <Link href="/user/browse" className="action-btn">
             <div style={{ width: '44px', height: '44px', borderRadius: '50%', background: '#fdf5f5', border: '1px solid #eddcc6', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
               <Search size={20} color="#bf4646" strokeWidth={1.5} />
             </div>
@@ -91,7 +91,7 @@ export default function UserDashboard() {
               <p className="sans" style={{ fontSize: '0.875rem', fontWeight: 600, color: '#2d2d2d' }}>Find a Bhai</p>
               <p className="sans" style={{ fontSize: '0.75rem', color: '#aaa' }}>Search workers</p>
             </div>
-          </link>
+          </Link>
           <a href="/user/bookings" className="action-btn">
             <div style={{ width: '44px', height: '44px', borderRadius: '50%', background: '#f0f7f8', border: '1px solid #c5dde0', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
               <ClipboardList size={20} color="#7eacb5" strokeWidth={1.5} />
@@ -116,9 +116,9 @@ export default function UserDashboard() {
             <div style={{ padding: '3rem', textAlign: 'center' }}>
               <Wrench size={32} color="#ddd" strokeWidth={1} style={{ margin: '0 auto 1rem' }} />
               <p className="sans" style={{ fontSize: '0.875rem', color: '#bbb', marginBottom: '1rem' }}>No bookings yet</p>
-              <link href="/user/browse" style={{ display: 'inline-flex', alignItems: 'center', gap: '0.4rem', background: '#bf4646', color: 'white', fontSize: '0.82rem', fontWeight: 600, padding: '0.6rem 1.25rem', borderRadius: '6px', textDecoration: 'none' }}>
+              <Link href="/user/browse" style={{ display: 'inline-flex', alignItems: 'center', gap: '0.4rem', background: '#bf4646', color: 'white', fontSize: '0.82rem', fontWeight: 600, padding: '0.6rem 1.25rem', borderRadius: '6px', textDecoration: 'none' }}>
                 Find a Bhai <ArrowRight size={13} />
-              </link>
+              </Link>
             </div>
           ) : (
             recentBookings.map(b => (

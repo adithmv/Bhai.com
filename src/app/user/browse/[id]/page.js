@@ -5,6 +5,7 @@ import { createClient } from '@/lib/supabase'
 import { useRouter, useParams } from 'next/navigation'
 import Image from 'next/image'
 import { ChevronLeft, MapPin, Star, Calendar, FileText, CheckCircle, ArrowRight, Wrench } from 'lucide-react'
+import Link from 'next/link'
 import LogoutButton from '@/components/shared/LogoutButton'
 
 export default function BookingPage() {
@@ -145,9 +146,9 @@ export default function BookingPage() {
               <a href="/user/bookings" style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.4rem', background: '#bf4646', color: 'white', fontFamily: 'DM Sans', fontWeight: 600, fontSize: '0.85rem', padding: '0.8rem', borderRadius: '6px', textDecoration: 'none' }}>
                 My Bookings <ArrowRight size={14} />
               </a>
-              <a href="/user/browse" style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', background: '#fff4ea', border: '1px solid #eddcc6', color: '#888', fontFamily: 'DM Sans', fontWeight: 600, fontSize: '0.85rem', padding: '0.8rem', borderRadius: '6px', textDecoration: 'none' }}>
+              <Link href="/user/browse" style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', background: '#fff4ea', border: '1px solid #eddcc6', color: '#888', fontFamily: 'DM Sans', fontWeight: 600, fontSize: '0.85rem', padding: '0.8rem', borderRadius: '6px', textDecoration: 'none' }}>
                 Browse More
-              </a>
+              </Link>
             </div>
           </div>
         ) : (
@@ -158,12 +159,17 @@ export default function BookingPage() {
               <div style={{ flex: 1, minWidth: 0 }}>
                 <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '0.5rem', marginBottom: '0.25rem' }}>
                   <p className="sans" style={{ fontSize: '0.95rem', fontWeight: 700, color: '#2d2d2d' }}>{worker.profiles?.full_name}</p>
-                  {worker.average_rating > 0 && (
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.25rem', flexShrink: 0 }}>
-                      <Star size={12} color="#bf4646" fill="#bf4646" />
-                      <span className="sans" style={{ fontSize: '0.78rem', fontWeight: 600, color: '#2d2d2d' }}>{worker.average_rating}</span>
-                    </div>
-                  )}
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '0.25rem', flexShrink: 0 }}>
+  {worker.average_rating > 0 ? (
+    <>
+      <Star size={12} color="#bf4646" fill="#bf4646" />
+      <span className="sans" style={{ fontSize: '0.78rem', fontWeight: 600, color: '#2d2d2d' }}>{worker.average_rating}</span>
+      <span className="sans" style={{ fontSize: '0.72rem', color: '#aaa' }}>({worker.total_reviews})</span>
+    </>
+  ) : (
+    <span className="sans" style={{ fontSize: '0.72rem', color: '#bbb' }}>No reviews</span>
+  )}
+</div>
                 </div>
                 <p className="sans" style={{ fontSize: '0.78rem', color: '#aaa', display: 'flex', alignItems: 'center', gap: '0.25rem', marginBottom: '0.6rem' }}>
                   <MapPin size={11} /> {worker.district}
@@ -175,7 +181,7 @@ export default function BookingPage() {
                   {worker.worker_towns?.slice(0, 3).map(t => <span key={t.town} className="town-tag">{t.town}</span>)}
                   {worker.worker_towns?.length > 3 && <span className="town-tag">+{worker.worker_towns.length - 3} more</span>}
                 </div>
-                {worker.bio && <p className="sans" style={{ fontSize: '0.75rem', color: '#bbb', marginTop: '0.5rem', fontStyle: 'italic' }}>"{worker.bio}"</p>}
+                {worker.bio && <p className="sans" style={{ fontSize: '0.75rem', color: '#bbb', marginTop: '0.5rem', fontStyle: 'italic' }}>&quot;{worker.bio}&quot;</p>}
               </div>
             </div>
 
