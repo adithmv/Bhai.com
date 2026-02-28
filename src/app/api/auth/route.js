@@ -11,7 +11,7 @@ export async function POST(request) {
   if (action === 'login') endpoint = `${SUPABASE_URL}/auth/v1/token?grant_type=password`
   if (action === 'register') endpoint = `${SUPABASE_URL}/auth/v1/signup`
 
-  const response = await fetch(endpoint, {
+  const authRes = await fetch(endpoint, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -21,6 +21,23 @@ export async function POST(request) {
     body: JSON.stringify(data),
   })
 
-  const result = await response.json()
-  return NextResponse.json(result, { status: response.status })
+  const authData = await authRes.json()
+  if (!authRes.ok) return NextResponse.json(authData, { status: authRes.status })
+
+  // For login, also fetch the profile role server-side
+  if (action === 'login' && authData.access_token) {
+    const profileRes = await fetch(
+      `${SUPABASE_URL}/rest/v1/profiles?id=eq.${authData.user.id}&select=role`,
+      {
+        headers: {
+          'apikey': SUPABASE_ANON_KEY,
+          'Authorization': `Bearer ${authData.access_token}`,
+        },
+      }
+    )
+    const profiles = await profileRes.json()
+    authData.profile = profiles?.[0] || null
+  }
+
+  return NextResponse.json(authData)
 }

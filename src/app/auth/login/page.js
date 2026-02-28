@@ -16,7 +16,7 @@ export default function LoginPage() {
   const router = useRouter()
   const supabase = createClient()
 
-  const handleLogin = async (e) => {
+const handleLogin = async (e) => {
   e.preventDefault()
   setLoading(true)
   setError('')
@@ -29,18 +29,17 @@ export default function LoginPage() {
     })
     const data = await res.json()
 
-    if (data.error) { setError(data.error_description || data.error); setLoading(false); return }
+    if (!res.ok) { setError(data.error_description || data.error || 'Login failed'); setLoading(false); return }
 
-    // Set session manually
     await supabase.auth.setSession({
       access_token: data.access_token,
       refresh_token: data.refresh_token,
     })
 
-    const { data: profile } = await supabase.from('profiles').select('role').eq('id', data.user.id).single()
-    if (!profile) { router.push('/auth/register'); return }
-    if (profile.role === 'admin') router.push('/admin/dashboard')
-    else if (profile.role === 'worker') router.push('/worker/dashboard')
+    const role = data.profile?.role
+    if (!role) { router.push('/auth/register'); return }
+    if (role === 'admin') router.push('/admin/dashboard')
+    else if (role === 'worker') router.push('/worker/dashboard')
     else router.push('/user/dashboard')
 
   } catch (err) {
