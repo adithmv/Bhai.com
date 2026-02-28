@@ -29,12 +29,22 @@ const handleLogin = async (e) => {
     })
     const data = await res.json()
 
-    if (!res.ok) { setError(data.error_description || data.error || 'Login failed'); setLoading(false); return }
+    if (!res.ok) {
+      setError(data.error_description || data.error || 'Login failed')
+      setLoading(false)
+      return
+    }
 
-    await supabase.auth.setSession({
+    // Store tokens in localStorage manually
+    const storageKey = `sb-${process.env.NEXT_PUBLIC_SUPABASE_URL?.split('//')[1]?.split('.')[0]}-auth-token`
+    localStorage.setItem(storageKey, JSON.stringify({
       access_token: data.access_token,
       refresh_token: data.refresh_token,
-    })
+      expires_at: data.expires_at,
+      expires_in: data.expires_in,
+      token_type: 'bearer',
+      user: data.user,
+    }))
 
     const role = data.profile?.role
     if (!role) { router.push('/auth/register'); return }
