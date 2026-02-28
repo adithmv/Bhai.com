@@ -16,17 +16,45 @@ export default function RegisterPage() {
 
   const handleChange = e => setForm({ ...form, [e.target.name]: e.target.value })
 
-  const handleRegister = async (e) => {
-    e.preventDefault()
-    setLoading(true)
-    setError('')
-    const { data, error: signUpError } = await supabase.auth.signUp({ email: form.email, password: form.password })
-    if (signUpError) { setError(signUpError.message); setLoading(false); return }
-    const { error: profileError } = await supabase.from('profiles').insert({ id: data.user.id, full_name: form.full_name, phone: form.phone, role: form.role })
+const handleRegister = async (e) => {
+  e.preventDefault()
+  setLoading(true)
+  setError('')
+
+  try {
+    // Register via proxy
+    const res = await fetch('/api/auth', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ action: 'register', email: form.email, password: form.password }),
+    })
+    const data = await res.json()
+
+    if (data.error) { setError(data.error_description || data.error); setLoading(false); return }
+
+    // Set session manually
+    await supabase.auth.setSession({
+      access_token: data.access_token,
+      refresh_token: data.refresh_token,
+    })
+
+    // Insert profile
+    const { error: profileError } = await supabase.from('profiles').insert({
+      id: data.user.id,
+      full_name: form.full_name,
+      phone: form.phone,
+      role: form.role
+    })
     if (profileError) { setError(profileError.message); setLoading(false); return }
+
     if (form.role === 'worker') router.push('/worker/profile')
     else router.push('/user/dashboard')
+
+  } catch (err) {
+    setError('Connection failed. Please try again.')
+    setLoading(false)
   }
+}
 
   return (
     <div style={{ minHeight: '100vh', background: '#fff4ea', display: 'flex', flexDirection: 'column', fontFamily: "'DM Sans', sans-serif" }}>
@@ -143,7 +171,7 @@ export default function RegisterPage() {
             {form.role === 'worker' && (
               <div style={{ background: '#f0f7f8', border: '1px solid #c5dde0', padding: '0.75rem 1rem', borderRadius: '6px' }}>
                 <p className="sans" style={{ fontSize: '0.78rem', color: '#7eacb5', fontWeight: 500 }}>
-                  After registration you'll complete your worker profile with skills, location and photo.
+                  After registration you&apos;ll complete your worker profile with skills, location and photo.
                 </p>
               </div>
             )}

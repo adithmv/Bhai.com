@@ -17,17 +17,37 @@ export default function LoginPage() {
   const supabase = createClient()
 
   const handleLogin = async (e) => {
-    e.preventDefault()
-    setLoading(true)
-    setError('')
-    const { data, error } = await supabase.auth.signInWithPassword({ email, password })
-    if (error) { setError(error.message); setLoading(false); return }
+  e.preventDefault()
+  setLoading(true)
+  setError('')
+
+  try {
+    const res = await fetch('/api/auth', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ action: 'login', email, password }),
+    })
+    const data = await res.json()
+
+    if (data.error) { setError(data.error_description || data.error); setLoading(false); return }
+
+    // Set session manually
+    await supabase.auth.setSession({
+      access_token: data.access_token,
+      refresh_token: data.refresh_token,
+    })
+
     const { data: profile } = await supabase.from('profiles').select('role').eq('id', data.user.id).single()
     if (!profile) { router.push('/auth/register'); return }
     if (profile.role === 'admin') router.push('/admin/dashboard')
     else if (profile.role === 'worker') router.push('/worker/dashboard')
     else router.push('/user/dashboard')
+
+  } catch (err) {
+    setError('Connection failed. Please try again.')
+    setLoading(false)
   }
+}
 
   return (
     <div style={{ minHeight: '100vh', background: '#fff4ea', display: 'flex', flexDirection: 'column', fontFamily: "'DM Sans', sans-serif" }}>
