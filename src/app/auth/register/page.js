@@ -22,7 +22,6 @@ const handleRegister = async (e) => {
   setError('')
 
   try {
-    // Register via proxy
     const res = await fetch('/api/auth', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
@@ -30,15 +29,29 @@ const handleRegister = async (e) => {
     })
     const data = await res.json()
 
-    if (data.error) { setError(data.error_description || data.error); setLoading(false); return }
+    if (!res.ok || data.error) {
+      setError(data.error_description || data.error || 'Registration failed')
+      setLoading(false)
+      return
+    }
 
-    // Set session manually
-    await supabase.auth.setSession({
+    // Save session to localStorage
+    const projectId = process.env.NEXT_PUBLIC_SUPABASE_URL?.split('//')[1]?.split('.')[0]
+    const storageKey = `sb-${projectId}-auth-token`
+    localStorage.setItem(storageKey, JSON.stringify({
       access_token: data.access_token,
       refresh_token: data.refresh_token,
-    })
+      expires_at: data.expires_at,
+      expires_in: data.expires_in,
+      token_type: 'bearer',
+      user: data.user,
+    }))
 
-    // Insert profile
+    // Set cookie for middleware
+    document.cookie = `sb-access-token=${data.access_token}; path=/; max-age=3600; SameSite=Lax`
+    document.cookie = `sb-refresh-token=${data.refresh_token}; path=/; max-age=86400; SameSite=Lax`
+
+    // Insert profile via Supabase client (uses localStorage token now)
     const { error: profileError } = await supabase.from('profiles').insert({
       id: data.user.id,
       full_name: form.full_name,
