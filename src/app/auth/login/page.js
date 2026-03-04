@@ -45,6 +45,8 @@ const handleLogin = async (e) => {
       token_type: 'bearer',
       user: data.user,
     }))
+    document.cookie = `sb-access-token=${data.access_token}; path=/; max-age=3600; SameSite=Lax`
+document.cookie = `sb-refresh-token=${data.refresh_token}; path=/; max-age=86400; SameSite=Lax`
 
     const role = data.profile?.role
     if (!role) { router.push('/auth/register'); return }

@@ -3,28 +3,12 @@ import { NextResponse } from 'next/server'
 
 export async function middleware(request) {
   const response = NextResponse.next()
-
-  const supabase = createServerClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL,
-    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY,
-    {
-      cookies: {
-        getAll() { return request.cookies.getAll() },
-        setAll(cookiesToSet) {
-          cookiesToSet.forEach(({ name, value, options }) => {
-            request.cookies.set(name, value, options)
-            response.cookies.set(name, value, options)
-          })
-        },
-      },
-    }
-  )
-
-  const { data: { user } } = await supabase.auth.getUser()
   const path = request.nextUrl.pathname
 
-  // not logged in — redirect to login
-  if (!user && (
+  // Check our manual cookie first
+  const accessToken = request.cookies.get('sb-access-token')?.value
+
+  if (!accessToken && (
     path.startsWith('/user') ||
     path.startsWith('/worker') ||
     path.startsWith('/admin')
