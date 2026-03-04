@@ -35,8 +35,8 @@ const handleLogin = async (e) => {
       return
     }
 
-    // Store tokens in localStorage manually
-    const storageKey = `sb-${process.env.NEXT_PUBLIC_SUPABASE_URL?.split('//')[1]?.split('.')[0]}-auth-token`
+    const projectId = process.env.NEXT_PUBLIC_SUPABASE_URL?.split('//')[1]?.split('.')[0]
+    const storageKey = `sb-${projectId}-auth-token`
     localStorage.setItem(storageKey, JSON.stringify({
       access_token: data.access_token,
       refresh_token: data.refresh_token,
