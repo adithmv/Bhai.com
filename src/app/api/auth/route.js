@@ -1,62 +1,33 @@
 import { NextResponse } from 'next/server'
 
 export async function POST(request) {
-  const body = await request.json()
-  const { action, ...data } = body
+  const formData = await request.formData()
+  const file = formData.get('file')
+  const path = formData.get('path')
 
   const SUPABASE_URL = process.env.NEXT_PUBLIC_SUPABASE_URL
   const SUPABASE_ANON_KEY = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
+  const accessToken = formData.get('access_token')
 
-  let endpoint = ''
-  if (action === 'login') endpoint = `${SUPABASE_URL}/auth/v1/token?grant_type=password`
-  if (action === 'register') endpoint = `${SUPABASE_URL}/auth/v1/signup`
+  const fileBuffer = await file.arrayBuffer()
 
-  const authRes = await fetch(endpoint, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      'apikey': SUPABASE_ANON_KEY,
-      'Authorization': `Bearer ${SUPABASE_ANON_KEY}`,
-    },
-    body: JSON.stringify({ email: data.email, password: data.password }),
-  })
-
-  const authData = await authRes.json()
-  if (!authRes.ok) return NextResponse.json(authData, { status: authRes.status })
-
-  // For login — fetch profile role
-  if (action === 'login' && authData.access_token) {
-    const profileRes = await fetch(
-      `${SUPABASE_URL}/rest/v1/profiles?id=eq.${authData.user.id}&select=role`,
-      {
-        headers: {
-          'apikey': SUPABASE_ANON_KEY,
-          'Authorization': `Bearer ${authData.access_token}`,
-        },
-      }
-    )
-    const profiles = await profileRes.json()
-    authData.profile = profiles?.[0] || null
-  }
-
-  // For register — insert profile server side using the new token
-  if (action === 'register' && authData.access_token) {
-    await fetch(`${SUPABASE_URL}/rest/v1/profiles`, {
+  const uploadRes = await fetch(
+    `${SUPABASE_URL}/storage/v1/object/worker-photos/${path}`,
+    {
       method: 'POST',
       headers: {
-        'Content-Type': 'application/json',
         'apikey': SUPABASE_ANON_KEY,
-        'Authorization': `Bearer ${authData.access_token}`,
-        'Prefer': 'return=minimal',
+        'Authorization': `Bearer ${accessToken}`,
+        'Content-Type': file.type,
+        'x-upsert': 'true',
       },
-      body: JSON.stringify({
-        id: authData.user.id,
-        full_name: data.full_name,
-        phone: data.phone,
-        role: data.role,
-      }),
-    })
-  }
+      body: fileBuffer,
+    }
+  )
 
-  return NextResponse.json(authData)
+  const result = await uploadRes.json()
+  if (!uploadRes.ok) return NextResponse.json(result, { status: uploadRes.status })
+
+  const publicUrl = `${SUPABASE_URL}/storage/v1/object/public/worker-photos/${path}`
+  return NextResponse.json({ publicUrl })
 }
