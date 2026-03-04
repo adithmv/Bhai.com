@@ -1,8 +1,13 @@
 'use client'
+'use client'
 
 import { useEffect, useState } from 'react'
 import { createClient } from '@/lib/supabase'
 import { useRouter } from 'next/navigation'
+import { getUserFromStorage } from '@/lib/getUser'  // ← add here
+
+
+
 import Image from 'next/image'
 import { ClipboardList, CheckCircle, XCircle, Clock, Phone, Calendar, ChevronRight, Wrench, HardHat, Pencil } from 'lucide-react'
 import LogoutButton from '@/components/shared/LogoutButton'
@@ -19,7 +24,7 @@ export default function WorkerDashboard() {
 
   useEffect(() => {
     const fetchData = async () => {
-      import { getUserFromStorage } from '@/lib/getUser'
+      
 
 const user = getUserFromStorage()
 if (!user) { router.push('/auth/login'); return }
