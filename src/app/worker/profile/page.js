@@ -88,37 +88,61 @@ export default function WorkerProfileSetup() {
     if (file) { setPhoto(file); setPreview(URL.createObjectURL(file)) }
   }
 
-  const handleSubmit = async (e) => {
-    e.preventDefault()
-    setLoading(true)
-    setError('')
-    if (selectedSkills.length === 0) { setError('Please select at least one skill.'); setLoading(false); return }
-    if (selectedTowns.length === 0) { setError('Please select at least one town.'); setLoading(false); return }
-    if (!photo) { setError('Please upload a profile photo.'); setLoading(false); return }
+ const handleSubmit = async (e) => {
+  e.preventDefault()
+  setLoading(true)
+  setError('')
 
-    
+  if (selectedSkills.length === 0) { setError('Please select at least one skill.'); setLoading(false); return }
+  if (selectedTowns.length === 0) { setError('Please select at least one town.'); setLoading(false); return }
+  if (!photo) { setError('Please upload a profile photo.'); setLoading(false); return }
 
-const user = getUserFromStorage()
-if (!user) { router.push('/auth/login'); return }
+  const user = getUserFromStorage()
+  if (!user) { router.push('/auth/login'); return }
 
-    const fileExt = photo.name.split('.').pop()
-    const fileName = `${user.id}.${fileExt}`
-    const { error: uploadError } = await supabase.storage.from('worker-photos').upload(fileName, photo, { upsert: true })
-    if (uploadError) { setError('Photo upload failed.'); setLoading(false); return }
+  // Get access token from localStorage
+  const keys = Object.keys(localStorage).filter(k => k.startsWith('sb-') && k.endsWith('-auth-token'))
+  const session = keys.length > 0 ? JSON.parse(localStorage.getItem(keys[0])) : null
+  const accessToken = session?.access_token
 
-    const { data: urlData } = supabase.storage.from('worker-photos').getPublicUrl(fileName)
+  if (!accessToken) { router.push('/auth/login'); return }
 
-    const { error: workerError } = await supabase.from('workers').insert({ id: user.id, district: form.district, bio: form.bio, photo_url: urlData.publicUrl })
-    if (workerError) { setError(workerError.message); setLoading(false); return }
+  // Upload photo via proxy
+  const fileExt = photo.name.split('.').pop()
+  const fileName = `${user.id}.${fileExt}`
+  const formData = new FormData()
+  formData.append('file', photo)
+  formData.append('path', fileName)
+  formData.append('access_token', accessToken)
 
-    const { error: skillsError } = await supabase.from('worker_skills').insert(selectedSkills.map(s => ({ worker_id: user.id, category: s.category, skill: s.skill })))
-    if (skillsError) { setError(skillsError.message); setLoading(false); return }
+  const uploadRes = await fetch('/api/upload', {
+    method: 'POST',
+    body: formData,
+  })
+  const uploadData = await uploadRes.json()
+  if (!uploadRes.ok) { setError('Photo upload failed.'); setLoading(false); return }
 
-    const { error: townsError } = await supabase.from('worker_towns').insert(selectedTowns.map(t => ({ worker_id: user.id, town: t })))
-    if (townsError) { setError(townsError.message); setLoading(false); return }
+  const photoUrl = uploadData.publicUrl
 
-    router.push('/worker/dashboard')
-  }
+  // Insert worker, skills, towns via proxy
+  const saveRes = await fetch('/api/worker-setup', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      access_token: accessToken,
+      user_id: user.id,
+      district: form.district,
+      bio: form.bio,
+      photo_url: photoUrl,
+      skills: selectedSkills,
+      towns: selectedTowns,
+    }),
+  })
+  const saveData = await saveRes.json()
+  if (!saveRes.ok) { setError(saveData.error || 'Failed to save profile.'); setLoading(false); return }
+
+  router.push('/worker/dashboard')
+}
 
   return (
     <div style={{ minHeight: '100vh', background: '#fff4ea', fontFamily: "'DM Sans', sans-serif" }}>
