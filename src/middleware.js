@@ -1,12 +1,12 @@
-import { createServerClient } from '@supabase/ssr'
 import { NextResponse } from 'next/server'
 
 export async function middleware(request) {
-  const response = NextResponse.next()
   const path = request.nextUrl.pathname
-
-  // Check our manual cookie first
   const accessToken = request.cookies.get('sb-access-token')?.value
+
+  console.log('MIDDLEWARE PATH:', path)
+  console.log('MIDDLEWARE COOKIE:', accessToken ? 'found' : 'missing')
+  console.log('ALL COOKIES:', request.cookies.getAll().map(c => c.name))
 
   if (!accessToken && (
     path.startsWith('/user') ||
@@ -16,7 +16,7 @@ export async function middleware(request) {
     return NextResponse.redirect(new URL('/auth/login', request.url))
   }
 
-  return response
+  return NextResponse.next()
 }
 
 export const config = {
