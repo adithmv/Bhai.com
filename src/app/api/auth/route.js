@@ -18,13 +18,13 @@ export async function POST(request) {
       'apikey': SUPABASE_ANON_KEY,
       'Authorization': `Bearer ${SUPABASE_ANON_KEY}`,
     },
-    body: JSON.stringify(data),
+    body: JSON.stringify({ email: data.email, password: data.password }),
   })
 
   const authData = await authRes.json()
   if (!authRes.ok) return NextResponse.json(authData, { status: authRes.status })
 
-  // For login, also fetch the profile role server-side
+  // For login — fetch profile role
   if (action === 'login' && authData.access_token) {
     const profileRes = await fetch(
       `${SUPABASE_URL}/rest/v1/profiles?id=eq.${authData.user.id}&select=role`,
@@ -37,6 +37,25 @@ export async function POST(request) {
     )
     const profiles = await profileRes.json()
     authData.profile = profiles?.[0] || null
+  }
+
+  // For register — insert profile server side using the new token
+  if (action === 'register' && authData.access_token) {
+    await fetch(`${SUPABASE_URL}/rest/v1/profiles`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'apikey': SUPABASE_ANON_KEY,
+        'Authorization': `Bearer ${authData.access_token}`,
+        'Prefer': 'return=minimal',
+      },
+      body: JSON.stringify({
+        id: authData.user.id,
+        full_name: data.full_name,
+        phone: data.phone,
+        role: data.role,
+      }),
+    })
   }
 
   return NextResponse.json(authData)

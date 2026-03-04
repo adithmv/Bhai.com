@@ -25,7 +25,14 @@ const handleRegister = async (e) => {
     const res = await fetch('/api/auth', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ action: 'register', email: form.email, password: form.password }),
+      body: JSON.stringify({
+        action: 'register',
+        email: form.email,
+        password: form.password,
+        full_name: form.full_name,
+        phone: form.phone,
+        role: form.role,
+      }),
     })
     const data = await res.json()
 
@@ -35,7 +42,6 @@ const handleRegister = async (e) => {
       return
     }
 
-    // Save session to localStorage
     const projectId = process.env.NEXT_PUBLIC_SUPABASE_URL?.split('//')[1]?.split('.')[0]
     const storageKey = `sb-${projectId}-auth-token`
     localStorage.setItem(storageKey, JSON.stringify({
@@ -47,18 +53,8 @@ const handleRegister = async (e) => {
       user: data.user,
     }))
 
-    // Set cookie for middleware
     document.cookie = `sb-access-token=${data.access_token}; path=/; max-age=3600; SameSite=Lax`
     document.cookie = `sb-refresh-token=${data.refresh_token}; path=/; max-age=86400; SameSite=Lax`
-
-    // Insert profile via Supabase client (uses localStorage token now)
-    const { error: profileError } = await supabase.from('profiles').insert({
-      id: data.user.id,
-      full_name: form.full_name,
-      phone: form.phone,
-      role: form.role
-    })
-    if (profileError) { setError(profileError.message); setLoading(false); return }
 
     if (form.role === 'worker') router.push('/worker/profile')
     else router.push('/user/dashboard')
