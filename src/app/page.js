@@ -1,5 +1,5 @@
 'use client'
-
+import { getUserFromStorage } from '@/lib/getUser'
 import { useEffect, useState } from 'react'
 import { createClient } from '@/lib/supabase'
 import { useRouter } from 'next/navigation'
@@ -20,8 +20,10 @@ export default function LandingPage() {
 
   useEffect(() => {
     const checkUser = async () => {
-      const { data: { user } } = await supabase.auth.getUser()
-      if (!user) return
+     
+
+const user = getUserFromStorage()
+if (!user) { router.push('/auth/login'); return }
       const { data: profile } = await supabase.from('profiles').select('role').eq('id', user.id).single()
       if (!profile) return
       if (profile.role === 'admin') router.push('/admin/dashboard')

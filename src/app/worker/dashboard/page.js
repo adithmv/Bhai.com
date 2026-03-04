@@ -19,8 +19,10 @@ export default function WorkerDashboard() {
 
   useEffect(() => {
     const fetchData = async () => {
-      const { data: { user } } = await supabase.auth.getUser()
-      if (!user) { router.push('/auth/login'); return }
+      import { getUserFromStorage } from '@/lib/getUser'
+
+const user = getUserFromStorage()
+if (!user) { router.push('/auth/login'); return }
       const { data: profileData } = await supabase.from('profiles').select('*').eq('id', user.id).single()
       setProfile(profileData)
       const { data: workerData } = await supabase.from('workers').select('status').eq('id', user.id).single()

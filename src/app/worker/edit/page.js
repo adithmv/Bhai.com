@@ -1,5 +1,5 @@
 'use client'
-
+import { getUserFromStorage } from '@/lib/getUser'
 import { useState, useEffect, useRef } from 'react'
 import { createClient } from '@/lib/supabase'
 import { useRouter } from 'next/navigation'
@@ -78,8 +78,10 @@ export default function WorkerEditProfile() {
 
   useEffect(() => {
     const load = async () => {
-      const { data: { user } } = await supabase.auth.getUser()
-      if (!user) { router.push('/auth/login'); return }
+      
+
+const user = getUserFromStorage()
+if (!user) { router.push('/auth/login'); return }
 
       const { data: workerData } = await supabase.from('workers').select('*').eq('id', user.id).single()
       if (!workerData) { router.push('/worker/dashboard'); return }

@@ -1,5 +1,5 @@
 'use client'
-
+import { getUserFromStorage } from '@/lib/getUser'
 import { useState, useEffect, useRef } from 'react'
 import { createClient } from '@/lib/supabase'
 import { Bell, CheckCheck, X } from 'lucide-react'
@@ -16,8 +16,10 @@ export default function NotificationBell() {
     let channel
 
     const init = async () => {
-      const { data: { user } } = await supabase.auth.getUser()
-      if (!user) return
+      
+
+const user = getUserFromStorage()
+if (!user) { router.push('/auth/login'); return }
 
       // Load existing notifications
       const { data } = await supabase
@@ -43,6 +45,7 @@ export default function NotificationBell() {
 
     init()
     return () => { if (channel) supabase.removeChannel(channel) }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   // Close dropdown on outside click

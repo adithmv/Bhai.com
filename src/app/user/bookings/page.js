@@ -1,5 +1,5 @@
 'use client'
-
+import { getUserFromStorage } from '@/lib/getUser'
 import { useEffect, useState } from 'react'
 import Link from 'next/link'
 import { createClient } from '@/lib/supabase'
@@ -29,8 +29,10 @@ export default function UserBookings() {
 
   const fetchBookings = async () => {
     setLoading(true)
-    const { data: { user } } = await supabase.auth.getUser()
-    if (!user) { router.push('/auth/login'); return }
+    
+
+const user = getUserFromStorage()
+if (!user) { router.push('/auth/login'); return }
     const { data } = await supabase
       .from('bookings')
       .select('*, workers(photo_url, district, profiles(full_name, phone)), reviews(id)')

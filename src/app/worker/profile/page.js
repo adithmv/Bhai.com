@@ -1,5 +1,5 @@
 'use client'
-
+import { getUserFromStorage } from '@/lib/getUser'
 import { useState } from 'react'
 import { createClient } from '@/lib/supabase'
 import { useRouter } from 'next/navigation'
@@ -96,8 +96,10 @@ export default function WorkerProfileSetup() {
     if (selectedTowns.length === 0) { setError('Please select at least one town.'); setLoading(false); return }
     if (!photo) { setError('Please upload a profile photo.'); setLoading(false); return }
 
-    const { data: { user } } = await supabase.auth.getUser()
-    if (!user) { router.push('/auth/login'); return }
+    
+
+const user = getUserFromStorage()
+if (!user) { router.push('/auth/login'); return }
 
     const fileExt = photo.name.split('.').pop()
     const fileName = `${user.id}.${fileExt}`

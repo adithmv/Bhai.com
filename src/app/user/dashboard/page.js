@@ -1,5 +1,5 @@
 'use client'
-
+import { getUserFromStorage } from '@/lib/getUser'
 import { useEffect, useState } from 'react'
 import { createClient } from '@/lib/supabase'
 import { useRouter } from 'next/navigation'
@@ -17,8 +17,10 @@ export default function UserDashboard() {
 
   useEffect(() => {
     const fetchData = async () => {
-      const { data: { user } } = await supabase.auth.getUser()
-      if (!user) { router.push('/auth/login'); return }
+      
+
+const user = getUserFromStorage()
+if (!user) { router.push('/auth/login'); return }
 
       const { data: profileData } = await supabase
         .from('profiles').select('*').eq('id', user.id).single()
