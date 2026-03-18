@@ -42,16 +42,18 @@ if (!user) { router.push('/auth/login'); return }
     if (workerStatus === 'approved') fetchBookings()
   }, [filter, workerStatus])
 
-  const fetchBookings = async () => {
-    const { data: { user } } = await supabase.auth.getUser()
-    const { data } = await supabase
-      .from('bookings')
-      .select('*, profiles(full_name, phone)')
-      .eq('worker_id', user.id)
-      .eq('status', filter)
-      .order('work_date', { ascending: true })
-    setBookings(data || [])
-  }
+const fetchBookings = async () => {
+  const user = getUserFromStorage()
+  if (!user) { router.push('/auth/login'); return }
+  
+  const { data } = await supabase
+    .from('bookings')
+    .select('*, profiles(full_name, phone)')
+    .eq('worker_id', user.id)
+    .eq('status', filter)
+    .order('work_date', { ascending: true })
+  setBookings(data || [])
+}
 
   const updateBooking = async (id, status) => {
     await supabase.from('bookings').update({ status }).eq('id', id)

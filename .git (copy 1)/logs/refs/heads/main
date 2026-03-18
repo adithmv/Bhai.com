@@ -1,0 +1,50 @@
+0000000000000000000000000000000000000000 b7db4909defc0605ed06df9a15c433719aa68221 adithmv <adithmvs3@gmail.com> 1772182201 +0530	commit (initial): Initial commit from Create Next App
+b7db4909defc0605ed06df9a15c433719aa68221 a4312c129467b8c67d6356c1582784a50a49ec28 adithmv <adithmvs3@gmail.com> 1772182501 +0530	commit: initial project setup
+a4312c129467b8c67d6356c1582784a50a49ec28 a4312c129467b8c67d6356c1582784a50a49ec28 adithmv <adithmvs3@gmail.com> 1772182514 +0530	Branch: renamed refs/heads/main to refs/heads/main
+a4312c129467b8c67d6356c1582784a50a49ec28 cebcb4e11d6c9d97687c166f2cc61ae4afa2564a adithmv <adithmvs3@gmail.com> 1772182965 +0530	commit: this is test commit
+cebcb4e11d6c9d97687c166f2cc61ae4afa2564a cebcb4e11d6c9d97687c166f2cc61ae4afa2564a adithmv <adithmvs3@gmail.com> 1772182993 +0530	Branch: renamed refs/heads/main to refs/heads/main
+cebcb4e11d6c9d97687c166f2cc61ae4afa2564a a312329566f5c42136c1ebfc8b8b449947aa81ed adithmv <adithmvs3@gmail.com> 1772183936 +0530	commit (merge): Resolved conflicts using detached head changes
+a312329566f5c42136c1ebfc8b8b449947aa81ed 2fa698270148c3857e9647e46ac04ef229eb1258 adithmv <adithmvs3@gmail.com> 1772184030 +0530	commit: testing
+2fa698270148c3857e9647e46ac04ef229eb1258 e69da597d772032fa7770c0e671e78b6a106ee91 adithmv <adithmvs3@gmail.com> 1772184122 +0530	commit: testing completed github setted up
+e69da597d772032fa7770c0e671e78b6a106ee91 472d66595203f829f8ccae29fa6825939e4edb41 adithmv <adithmvs3@gmail.com> 1772184238 +0530	commit: add supabase client setup
+472d66595203f829f8ccae29fa6825939e4edb41 13da6db48f8a06f53509ce6c9877b70f6ccef2bd adithmv <adithmvs3@gmail.com> 1772184927 +0530	commit: add email auth flow - login and register pages
+13da6db48f8a06f53509ce6c9877b70f6ccef2bd eb09f244e99fdb93e83c426110a9c7bac94a035d adithmv <adithmvs3@gmail.com> 1772185434 +0530	commit: add placeholder dashboard pages
+eb09f244e99fdb93e83c426110a9c7bac94a035d 6fc81d79f2c151e4a696f4bd706d8c721c96d056 adithmv <adithmvs3@gmail.com> 1772186162 +0530	commit: add worker profile setup page with categories and skills
+6fc81d79f2c151e4a696f4bd706d8c721c96d056 11d17dbb873b312d414b7debd19d7ae6f859efc7 adithmv <adithmvs3@gmail.com> 1772187658 +0530	commit: update worker profile with multiple skills and updated categories
+11d17dbb873b312d414b7debd19d7ae6f859efc7 7863ea766f58cc0703815769ac852bb7a3b0cdd0 adithmv <adithmvs3@gmail.com> 1772187778 +0530	commit: update worker profile with multiple skills and updated categories
+7863ea766f58cc0703815769ac852bb7a3b0cdd0 4220676260a2cd2599194a38d01da378d0918ccd adithmv <adithmvs3@gmail.com> 1772188321 +0530	commit: add skill descriptions as hover tooltips on worker profile
+4220676260a2cd2599194a38d01da378d0918ccd 021d7bca37ee583815fc217c444cd187c40689d7 adithmv <adithmvs3@gmail.com> 1772188945 +0530	commit: add admin panel - dashboard and worker approvals
+021d7bca37ee583815fc217c444cd187c40689d7 909cfa629de751f730e1665ebe9126478abf9126 adithmv <adithmvs3@gmail.com> 1772193387 +0530	commit: admin panel created and connected
+909cfa629de751f730e1665ebe9126478abf9126 44efd200e6d17266f552649c9f07970f7256db38 adithmv <adithmvs3@gmail.com> 1772193541 +0530	commit: add user dashboard and browse workers page
+44efd200e6d17266f552649c9f07970f7256db38 e3d9161b8a676603d8ef6800d98d02143718ab36 adithmv <adithmvs3@gmail.com> 1772197861 +0530	commit: add district and town selection to worker profile with full Kerala data
+e3d9161b8a676603d8ef6800d98d02143718ab36 8bef9d870232f34c78cc879153aad67efdb089d9 adithmv <adithmvs3@gmail.com> 1772198239 +0530	commit: update browse page with district and town filter
+8bef9d870232f34c78cc879153aad67efdb089d9 ca381d42085796336e6fa094fb4130f1224b5619 adithmv <adithmvs3@gmail.com> 1772198654 +0530	commit: add district and towns to admin worker list
+ca381d42085796336e6fa094fb4130f1224b5619 a69b1d51bd7516bb494ad0988c11a030d45929cf adithmv <adithmvs3@gmail.com> 1772202515 +0530	commit: add booking page with date and description
+a69b1d51bd7516bb494ad0988c11a030d45929cf eaa4c0beac6854cfe5ea2751478a46e3c56de44d adithmv <adithmvs3@gmail.com> 1772202972 +0530	commit: fix booking page parse error
+eaa4c0beac6854cfe5ea2751478a46e3c56de44d 58a181a5502b069e8445389e8a4caea1350e6145 adithmv <adithmvs3@gmail.com> 1772204043 +0530	commit: add worker dashboard with booking management
+58a181a5502b069e8445389e8a4caea1350e6145 4accc7986a48d9f2933c61b1989207780a6ef925 adithmv <adithmvs3@gmail.com> 1772210397 +0530	commit: add report system - user report modal and admin reports page
+4accc7986a48d9f2933c61b1989207780a6ef925 7390d5d59d6546fb29679525d1f82d02a8f079d9 adithmv <adithmvs3@gmail.com> 1772211322 +0530	commit: add logout button and route protection middleware
+7390d5d59d6546fb29679525d1f82d02a8f079d9 54aa31a5847fdf5802658e69e7c6f5d12d6b9651 adithmv <adithmvs3@gmail.com> 1772212542 +0530	commit: add logout button to worker dashboard
+54aa31a5847fdf5802658e69e7c6f5d12d6b9651 6cc038d5b1885c73369fd04f122462da8af84baa adithmv <adithmvs3@gmail.com> 1772219747 +0530	commit: created final landing page:
+6cc038d5b1885c73369fd04f122462da8af84baa 299f81d392b0b41b30af16ad31cef70dedd812cf adithmv <adithmvs3@gmail.com> 1772220516 +0530	commit: designed the login and register page
+299f81d392b0b41b30af16ad31cef70dedd812cf 4b69f8ff294e0d4dbdf3c83594acc5b6d71454fa adithmv <adithmvs3@gmail.com> 1772247975 +0530	commit: make login and register pages mobile friendly
+4b69f8ff294e0d4dbdf3c83594acc5b6d71454fa e563ac7e1015351afff692855513b68e49f80783 adithmv <adithmvs3@gmail.com> 1772248394 +0530	commit: redesign user dashboard, browse and bookings pages
+e563ac7e1015351afff692855513b68e49f80783 09345e49796391cc4e181518cd6ccbcf5773a47a adithmv <adithmvs3@gmail.com> 1772249736 +0530	commit: redesign worker dashboard and profile setup pages
+09345e49796391cc4e181518cd6ccbcf5773a47a ed4282bbd018f02d789acf48902d2cc8218e2f22 adithmv <adithmvs3@gmail.com> 1772250916 +0530	commit: redesign admin panel - layout, dashboard, workers and reports pages
+ed4282bbd018f02d789acf48902d2cc8218e2f22 c6e2ac0c14cb5018a7d7f3d8520db8f314186b9d adithmv <adithmvs3@gmail.com> 1772251117 +0530	commit: redesign booking page with warm palette and lucide icons
+c6e2ac0c14cb5018a7d7f3d8520db8f314186b9d afc6f008caae32c93b0b55b992cd073ab7f5f757 adithmv <adithmvs3@gmail.com> 1772260658 +0530	commit: edit option created
+afc6f008caae32c93b0b55b992cd073ab7f5f757 2f14a15b93f3735c915cd7437348d1b8b60ca2f8 adithmv <adithmvs3@gmail.com> 1772262076 +0530	commit: create notification bell
+2f14a15b93f3735c915cd7437348d1b8b60ca2f8 5c5cbb13b795d96fb212edab2d794c3ce85ee3c3 adithmv <adithmvs3@gmail.com> 1772274214 +0530	commit: ready for deployment
+5c5cbb13b795d96fb212edab2d794c3ce85ee3c3 cf0ee4b025f34b6964516024da3c6861dc90e601 adithmv <adithmvs3@gmail.com> 1772280302 +0530	commit: proxy added
+cf0ee4b025f34b6964516024da3c6861dc90e601 375582d9a00c93b3d7628da4a990053c106fd0a8 adithmv <adithmvs3@gmail.com> 1772280739 +0530	commit: proxy edited
+375582d9a00c93b3d7628da4a990053c106fd0a8 6bb1cc4cbc6a0eab2d810784e35b43e08c67c945 adithmv <adithmvs3@gmail.com> 1772281111 +0530	commit: proxy login change
+6bb1cc4cbc6a0eab2d810784e35b43e08c67c945 1661de76fd5ddf03bbd3e873fc5419d8d1a159a8 adithmv <adithmvs3@gmail.com> 1772641593 +0530	commit: loginhandler is fixed.:
+1661de76fd5ddf03bbd3e873fc5419d8d1a159a8 c6f9295e9991c8658035de509d5c628483caaf62 adithmv <adithmvs3@gmail.com> 1772643081 +0530	commit: middleware corrected
+c6f9295e9991c8658035de509d5c628483caaf62 9e3569e80bda9a15c924b72c6f4b69aeb5ce3d3a adithmv <adithmvs3@gmail.com> 1772643277 +0530	commit: testing middleware
+9e3569e80bda9a15c924b72c6f4b69aeb5ce3d3a 21fd5d6c90ea46ee348b1c82ded0cadfdd72560b adithmv <adithmvs3@gmail.com> 1772644290 +0530	commit: added getaUser for external storage of data
+21fd5d6c90ea46ee348b1c82ded0cadfdd72560b bd321dba70a757a2005edcd8229bd843584e46e2 adithmv <adithmvs3@gmail.com> 1772644527 +0530	commit: added getaUser for external storage of data
+bd321dba70a757a2005edcd8229bd843584e46e2 58e050ea535ed4ad33b9d94c6d2ee34b9f28ea49 adithmv <adithmvs3@gmail.com> 1772645625 +0530	commit: registration page converted
+58e050ea535ed4ad33b9d94c6d2ee34b9f28ea49 d267af0126f4f378570b38b65f8c3670982c7f22 adithmv <adithmvs3@gmail.com> 1772646263 +0530	commit: testing register page
+d267af0126f4f378570b38b65f8c3670982c7f22 de8e8e4acc2a3ea6962e7ea4daa4b0e7fc1b1ce9 adithmv <adithmvs3@gmail.com> 1772646721 +0530	commit: proxy added to photo upload
+de8e8e4acc2a3ea6962e7ea4daa4b0e7fc1b1ce9 ff03e6f32158c318978de4a3efa1c60ec90b1e7e adithmv <adithmvs3@gmail.com> 1772647176 +0530	commit: proxy changed to photo upload
+ff03e6f32158c318978de4a3efa1c60ec90b1e7e 33c25654b917e75360a2f1638a0bb54cc062ae39 adithmv <adithmvs3@gmail.com> 1772647630 +0530	commit: proxy of login page crashes
